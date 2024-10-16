@@ -1,0 +1,46 @@
+FROM openjdk:11
+RUN mkdir /app
+COPY Hello.java /app
+WORKDIR /app
+RUN javac Hello.java
+CMD ["java","Hello"]
+
+//////////////////////\
+
+FROM ubuntu:20.04
+RUN apt update
+RUN apt install default-jdk -y
+COPY . .
+RUN javac Hello.java
+CMD ["java","Hello"]
+
+//////////////////////\
+
+FROM node:alpine3.10
+COPY . /app
+WORKDIR /app
+CMD node app.js
+
+//////////////////////\
+
+FROM ubuntu
+RUN apt update
+RUN apt install apache2 -y
+RUN apt install apache2-utils -y
+RUN apt clean
+EXPOSE 80
+CMD ["apache2ctl","-D","FOREGROUND"]
+
+////////////////////////\
+
+FROM ubuntu
+RUN apt update
+RUN apt install apache2 -y
+RUN apt install apache2-utils -y
+RUN echo "Welcome to this webpage" > /var/www/html/index.html
+WORKDIR /var/www/html
+RUN apt clean
+EXPOSE 80
+CMD ["apache2ctl","-D","FOREGROUND"]
+
+/////////////////////\
